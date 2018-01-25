@@ -1,0 +1,2 @@
+python developer,10k,django|mysql,shenzhen,1-3years,graduate,ML|AI,huawei,500 person,IT
+python developer,12k,django|mysql,shenzhen,1-3years,graduate,ML|AI,honor,100 person,IT
