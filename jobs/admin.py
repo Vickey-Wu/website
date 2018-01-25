@@ -7,4 +7,4 @@ class JobsInfoCustomize(admin.ModelAdmin):
     # search_fields = ('job_title')
     list_filter = ('job_title','job_salary')
 
-admin.site.register(models.JobsInfo, models.JobsInfoCustomize)
+admin.site.register(models.JobsInfo, JobsInfoCustomize)
