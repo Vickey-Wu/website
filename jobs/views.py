@@ -9,6 +9,10 @@ def echarts(request):
     return render(request, 'jobs/echarts.html')
 
 
+def home(request):
+    return render(request, 'jobs/home.html')
+
+
 def create_bar():
     user_list = JobsInfo.objects.all().values_list("job_title", "job_salary", "job_exp")
     page = pe.Page()

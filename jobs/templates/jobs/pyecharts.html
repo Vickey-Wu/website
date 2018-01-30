@@ -4,14 +4,14 @@
 
 <head>
     <meta charset="utf-8">
-    <title>pyecharts example</title>
+    <title>Proudly presented by PycCharts</title>
     {% for jsfile_name in script_list %}
     <script src="{{host}}/{{jsfile_name}}.js"></script>
     {% endfor %}
 </head>
 
 <body>
-  {{myechart|safe}}
+    {{myechart|safe}}
 </body>
 
 </html>
