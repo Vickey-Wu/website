@@ -13,6 +13,14 @@ def home(request):
     return render(request, 'jobs/home.html')
 
 
+def blog(request):
+    return render(request, 'jobs/blog.html')
+
+
+def contact(request):
+    return render(request, "jobs/contact.html", {"content": ["welcome to contact page", "my email is vickey557@gmail.com"]})
+
+
 def create_bar():
     user_list = JobsInfo.objects.all().values_list("job_title", "job_salary", "job_exp")
     page = pe.Page()
