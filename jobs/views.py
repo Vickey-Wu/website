@@ -5,12 +5,13 @@ from pyecharts.constants import DEFAULT_HOST
 from jobs.models import JobsInfo
 from django.http import HttpResponse
 
-def echarts(request):
-    return render(request, 'jobs/echarts.html')
-
 
 def home(request):
     return render(request, 'jobs/home.html')
+
+
+def echarts(request):
+    return render(request, 'jobs/echarts.html')
 
 
 def blog(request):
@@ -25,18 +26,18 @@ def create_bar():
     user_list = JobsInfo.objects.all().values_list("job_title", "job_salary", "job_exp")
     page = pe.Page()
 
-    name = ["服装"]
-    name2 = ["电器"]
+    name = ["tan"]
+    name2 = ["xingxing"]
     x = list(user_list[0])
     y = ["50", 200, 100]
     y2 = ["50", 300, 1400]
     # bar
-    bar = pe.Bar("我的第一个图表", "这里是副标题", width=600, height=300)
+    bar = pe.Bar("my first Chart", "subtitle", width=600, height=300)
     bar.add(name, x, y)
     bar.add(name2, x, y2)
     page.add(bar)
     # line
-    line = pe.Line('Demo Line', "这里是副标题", width=600, height=300)
+    line = pe.Line('my first Line', "subtitle", width=600, height=300)
     line.add(name, x, y)
     line.add(name2, x, y2)
     page.add(line)
@@ -49,6 +50,6 @@ def py_eharts(request):
     context = dict(
         myechart=page.render_embed(),
         host=DEFAULT_HOST,
-        script_list=page.get_js_dependencies()
+        script_list=page.get_js_dependencies(),
     )
     return HttpResponse(template.render(context, request))

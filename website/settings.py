@@ -19,6 +19,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
 
+
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = '0698sh2=id-f_o-+l*44hg-zt_4$ccqr^51k%j(u$#6m@+!yh#'
 
@@ -85,6 +86,7 @@ DATABASES = {
         'PASSWORD': '123',
         'HOST': '127.0.0.1',
         'PORT': '3306',
+        'CHARSET': 'utf-8'
     }
 }
 

@@ -3,7 +3,7 @@ from django.contrib import admin
 class JobsInfo(models.Model):
     job_title = models.CharField(max_length=30)
     job_salary = models.CharField(max_length=30)
-    job_requirement = models.TextField()
+    job_requirement = models.CharField(max_length=2000)
     job_addr = models.CharField(max_length=100)
     job_exp = models.CharField(max_length=20)
     job_edu = models.CharField(max_length=20)
