@@ -5,6 +5,9 @@ from pyecharts.constants import DEFAULT_HOST
 from jobs.models import JobsInfo
 from django.http import HttpResponse
 
+from jobs.process_data.jobs_data_init import process_field
+from jobs.process_data.jobs_data_init import process_reqirement
+
 
 def home(request):
     return render(request, 'jobs/home.html')
@@ -23,24 +26,42 @@ def contact(request):
 
 
 def create_bar():
+    # query with django models objects
     user_list = JobsInfo.objects.all().values_list("job_title", "job_salary", "job_exp")
+    # query with pymysql
     page = pe.Page()
-
-    name = ["tan"]
-    name2 = ["xingxing"]
-    x = list(user_list[0])
-    y = ["50", 200, 100]
-    y2 = ["50", 300, 1400]
+    salary = process_field("job_salary")
+    requirement = process_reqirement("job_requirement")
+    x1, x2, x3, y1, y2, y3 = [], [], [], [], [], []
+    sal_min = salary[0]
+    sal_avg = salary[1]
+    for s1 in sal_min:
+        x1.append(s1[0])
+        y1.append(s1[1])
+    for s2 in sal_avg:
+        x2.append(s2[0])
+        y2.append(s2[1])
+    for s3 in requirement:
+        x3.append(s3[0])
+        y3.append(s3[1])
+    name1 = ["sal_min"]
+    name2 = ["sal_avg"]
+    name3 = ["sal_req"]
     # bar
-    bar = pe.Bar("my first Chart", "subtitle", width=600, height=300)
-    bar.add(name, x, y)
-    bar.add(name2, x, y2)
+    bar = pe.Bar("my first Chart", "subtitle", width=900, height=300)
+    bar.add(name1, x1, y1)
+    bar.add(name2, x2, y2)
     page.add(bar)
     # line
-    line = pe.Line('my first Line', "subtitle", width=600, height=300)
-    line.add(name, x, y)
-    line.add(name2, x, y2)
+    line = pe.Line('my first Line', "subtitle", width=900, height=300)
+    line.add(name1, x1, y1)
+    line.add(name2, x2, y2)
     page.add(line)
+    # pie
+
+    pie = pe.Pie("requirement", "subtitle", width=900, height=1200)
+    pie.add(name3, x3, y3)
+    page.add(pie)
     return page
 
 
