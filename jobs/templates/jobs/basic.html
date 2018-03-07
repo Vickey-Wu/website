@@ -2,13 +2,13 @@
 <html lang="en">
 
 <head>
-    <title>vickey's blog</title>
+    <title>vickey's website</title>
     <meta charset="utf-8"/>
     {% load staticfiles %}
     <link rel="stylesheet" href="{% static 'jobs/css/bootstrap.min.css' %}" type="text/css"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    {#    js for echarts#}
+    {# js for echarts#}
     {% for jsfile_name in script_list %}
     <script src="{{host}}/{{jsfile_name}}.js"></script>
     {% endfor %}
@@ -18,9 +18,10 @@
         body {
             height: 100%;
             background-color: #fff;
-
         }
-
+        ul{
+            list-style: none;
+        }
     </style>
 </head>
 
@@ -53,10 +54,11 @@
             <div class="well bs-sidebar" id="sidebar" style="background-color:#fff">
                 <ul>
                     <li><a href="/home">Home</a></li>
-                    <li><a href='/blog'>Blog</a></li>
+                    <li><a href='http://www.cnblogs.com/vickey-wu/'>Blog</a></li>
+                    <li><a href='https://github.com/Vickey-Wu'>GitHub</a></li>
+                    <li><a href='/pyecharts'>MultiEcharts</a></li>
+                    <li><a href='/echarts'>DemoEcharts</a></li>
                     <li><a href='/contact'>Contact</a></li>
-                    <li><a href='/pyecharts'>multiEcharts</a></li>
-                    <li><a href='/echarts'>singleEcharts</a></li>
                 </ul>
             </div> <!--well bs-sidebar affix-->
         </div> <!--col-sm-2-->

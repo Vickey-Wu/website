@@ -16,12 +16,12 @@ import pyecharts
 from datetime import datetime
 import numpy as np
 import pandas as pd
-import matplotlib as mpl
+# import matplotlib as mpl
 import re
 # cut word
 import jieba
 from wordcloud import WordCloud
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 from collections import Counter
 from scipy.misc import imread
 
@@ -152,7 +152,6 @@ def process_reqirement(field_name):
     text1 = " ".join(jieba.cut(str(original_req)))
     [item for item in sorted(text0.values())]
     # print(text0.keys(), text0.values())
-    # print(type(text0), text0)
 
 
     # find requirement item what we really need
@@ -188,3 +187,31 @@ def process_reqirement(field_name):
 
     return req_mention_list
 # process_reqirement("job_requirement")
+
+def user_defined(file_name):
+    user_list = []
+    with open(file_name, "r", encoding="utf8") as f:
+        for i in f:
+            user_list.append(i.strip())
+    return user_list
+
+def process_company(field_name):
+    sql = "select " + field_name + " from website.jobs_jobsinfo;"
+    company = [list(i) for i in connect_mysql(sql)]
+    # user_list = user_defined("t.txt")
+    user_list = ['C','C#','C++','Go','Linux','MongoDB','Mysql','PostgreSQL','Ajax','Bootstrap','CSS','Django','Docker','Flask','Git','http','tcp','Java','JavaScript','Jquery','Oracle','Python','Redis','Ruby','Scrapy','shell','Tornado','Web','RESTful','云计算','分布式','前端','后端','大数据','高并发','数据分析','数据挖掘','机器学习','爬虫','算法','自动化','测试','运维','集群']
+    jieba.load_userdict(user_list)
+    me_list = ['python', 'django', 'linux', '运维', '自动化', '爬虫', '数据分析', 'shell', 'mysql', 'oracle']
+    req_list, suit_list = [], []
+    for req in company:
+        req_dict = Counter(jieba.cut(req[1]))
+        req_list.append([req[0], [k for k in req_dict.keys() if k in user_list]])
+    for r in req_list:
+        if len(r[1]) > 0:
+            # print(r[1])
+            own = [item for item in me_list if item in r[1]]
+            if len(own) > 0:
+                suit_list.append([r[0], int(len(own) * 100/len(r[1]))])
+    # print(sorted(suit_list, key=lambda x: x[1]))
+    return sorted(suit_list, key=lambda x: x[1])
+# process_company("company_name, job_requirement")
