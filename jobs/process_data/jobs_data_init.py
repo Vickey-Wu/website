@@ -27,7 +27,7 @@ from scipy.misc import imread
 
 
 def connect_mysql(sql, oper_type="select", data_l=None):
-    conn = pymysql.connect(host='localhost', user="root", password="123",
+    conn = pymysql.connect(host='localhost', user="root", password="Vickey123$",
                            database="website", port=3306, charset="utf8")
     cur = conn.cursor()
     if oper_type == "insert":
@@ -84,7 +84,7 @@ def count_times(all_list):
 
 
 def process_field(field_name):
-    sql = "select " + field_name + " from jobs_jobsinfo where job_exp = '1-3年';"
+    sql = "select " + field_name + " from jobs_jobsinfo where job_exp = '1年以内' or job_exp = '经验不限' or job_exp = '1-3年';"
     column_name = connect_mysql(sql, oper_type="select")
     # sort salary order
     row_category = list(set(column_name))
@@ -141,51 +141,31 @@ def process_field(field_name):
 
 def process_reqirement(field_name):
     sql_all_req = "select " + field_name + " from jobs_jobsinfo"
-    sql = "select " + field_name + " from jobs_jobsinfo where job_exp = '1年以内' or job_exp = '经验不限';"
+    sql = "select " + field_name + " from jobs_jobsinfo where job_exp = '1年以内' or job_exp = '经验不限' or job_exp = '1-3年';"
     original_req = connect_mysql(sql)
     original_all_req = connect_mysql(sql_all_req)
-    user_list = ["C", "C#", "C++", "Go", "Linux", "MongoDB", "Mysql", "PostgreSQL", "Ajax", "Bootstrap", "CSS", "Django", "Docker", "Flask", "Git", "http", "tcp", "Java", "JavaScript", "Jquery", "Oracle", "Python", "Redis", "Ruby", "Scrapy", "shell", "Tornado", "Web", "Zabbix", "RESTful", "云计算", "分布式", "前端", "后端", "大数据", "高并发", "数据分析", "数据挖掘", "机器学习", "爬虫", "算法", "自动化", "运维", "集群"]
 
-    jieba.load_userdict(user_list)
-    # print(type(original_req), str(original_req))
+    # 　cut word according user dict
+    user_dict = {"C": 0,"C#": 0,"C++": 0,"Go": 0,"Linux": 0,"MongoDB": 0,"Mysql": 0,"PostgreSQL": 0,"Ajax": 0,"Bootstrap": 0,"CSS": 0,"Django": 0,"Docker": 0,"Flask": 0,"Git": 0,"http": 0,"tcp": 0,"Java": 0,"JavaScript": 0,"Jquery": 0,"Oracle": 0,"Python": 0,"Redis": 0,"Ruby": 0,"Scrapy": 0,"shell": 0,"Tornado": 0,"Web": 0,"Zabbix": 0,"RESTful": 0,"云计算": 0,"分布式": 0,"前端": 0,"后端": 0,"大数据": 0,"高并发": 0,"数据分析": 0,"数据挖掘": 0,"机器学习": 0,"爬虫": 0,"算法": 0,"自动化": 0,"运维": 0,"集群": 0}
+    jieba.load_userdict(user_dict.keys())
     text0 = Counter(jieba.cut(str(original_req)))
-    text1 = " ".join(jieba.cut(str(original_req)))
-    [item for item in sorted(text0.values())]
-    # print(text0.keys(), text0.values())
+    # text1 = " ".join(jieba.cut(str(original_req)))
 
-
-    # find requirement item what we really need
-    req_list, req_mention_list = [], []
-    # print(len(text0.keys()), text0)
-    for k, v in text0.items():
+    ## find requirement item what we really need
+    req_mention_list, req_list = [], []
+    req_dict, tmp_dict = {}, {}
+    me_list = ["python", "linux", "mysql", "django", "scrapy"]
+    # init a dict that value is a list to collect the value that belong to the same req tag
+    for k in user_dict.keys():
+        tmp_dict.setdefault(k.lower(), [])
+    # to sum all value
+    for k, v in tmp_dict.items():
         for kk, vv in text0.items():
-            if str(k).lower() == str(kk).lower():
-                # print(k, v)
-                req_list.append([k, (v + vv)])
-                # print(k, v)
-                break
-    # print(len(req_list), req_list)
-    for kw in user_list:
-        for k, v in text0.items():
-            if kw.lower() == str(k).lower():
-                req_list.append([kw, v])
-                break
-    # print(req_list)
-    for rkw in req_list:
-        for ukw in user_list:
-            if rkw[0].lower() == ukw.lower():
-                req_mention_list.append(rkw)
-                break
-    print(req_mention_list)
-
-    # create word cloud
-    # wordcloud = WordCloud(font_path=r"E:\pythonProcess\website\jobs\database\simhei.ttf",
-    #                       background_color="white", mask=imread("python.jpg")).generate(text1)
-    # plt.imshow(wordcloud)
-    # plt.axis("off")
-    # plt.show()
-
-    return req_mention_list
+            if k == kk.lower():
+                v.append(vv)
+        req_list.append([k, sum(v)])
+    print(req_list)
+    return req_list
 # process_reqirement("job_requirement")
 
 def user_defined(file_name):
@@ -198,10 +178,11 @@ def user_defined(file_name):
 def process_company(field_name):
     sql = "select " + field_name + " from website.jobs_jobsinfo;"
     company = [list(i) for i in connect_mysql(sql)]
-    # user_list = user_defined("t.txt")
+    print(company)
     user_list = ['C','C#','C++','Go','Linux','MongoDB','Mysql','PostgreSQL','Ajax','Bootstrap','CSS','Django','Docker','Flask','Git','http','tcp','Java','JavaScript','Jquery','Oracle','Python','Redis','Ruby','Scrapy','shell','Tornado','Web','RESTful','云计算','分布式','前端','后端','大数据','高并发','数据分析','数据挖掘','机器学习','爬虫','算法','自动化','测试','运维','集群']
     jieba.load_userdict(user_list)
     me_list = ['python', 'django', 'linux', '运维', '自动化', '爬虫', '数据分析', 'shell', 'mysql', 'oracle']
+
     req_list, suit_list = [], []
     for req in company:
         req_dict = Counter(jieba.cut(req[1]))
@@ -212,6 +193,6 @@ def process_company(field_name):
             own = [item for item in me_list if item in r[1]]
             if len(own) > 0:
                 suit_list.append([r[0], int(len(own) * 100/len(r[1]))])
-    # print(sorted(suit_list, key=lambda x: x[1]))
+    print(sorted(suit_list, key=lambda x: x[1]))
     return sorted(suit_list, key=lambda x: x[1])
-# process_company("company_name, job_requirement")
+process_company("company_name, job_requirement")
