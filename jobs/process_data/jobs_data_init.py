@@ -27,7 +27,7 @@ from scipy.misc import imread
 
 
 def connect_mysql(sql, oper_type="select", data_l=None):
-    conn = pymysql.connect(host='localhost', user="root", password="Vickey123$",
+    conn = pymysql.connect(host='localhost', user="root", password="123",
                            database="website", port=3306, charset="utf8")
     cur = conn.cursor()
     if oper_type == "insert":
