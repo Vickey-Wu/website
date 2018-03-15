@@ -152,7 +152,7 @@ def process_reqirement(field_name):
     # text1 = " ".join(jieba.cut(str(original_req)))
 
     ## find requirement item what we really need
-    req_mention_list, req_list = [], []
+    req_list_percent, req_list = [], []
     req_dict, tmp_dict = {}, {}
     me_list = ["python", "linux", "mysql", "django", "scrapy"]
     # init a dict that value is a list to collect the value that belong to the same req tag
@@ -165,8 +165,14 @@ def process_reqirement(field_name):
                 v.append(vv)
         req_list.append([k, sum(v)])
     print(req_list)
+    data = pd.DataFrame(req_list)
+    req_sum = sum(data.ix[:, 1])
+    for r in req_list:
+        req_per = "%.2f" % ((r[1] / req_sum) * 100)
+        r[1] = req_per
     return req_list
-# process_reqirement("job_requirement")
+process_reqirement("job_requirement")
+
 
 def user_defined(file_name):
     user_list = []
@@ -178,7 +184,7 @@ def user_defined(file_name):
 def process_company(field_name):
     sql = "select " + field_name + " from website.jobs_jobsinfo;"
     company = [list(i) for i in connect_mysql(sql)]
-    print(company)
+    # print(company)
     user_list = ['C','C#','C++','Go','Linux','MongoDB','Mysql','PostgreSQL','Ajax','Bootstrap','CSS','Django','Docker','Flask','Git','http','tcp','Java','JavaScript','Jquery','Oracle','Python','Redis','Ruby','Scrapy','shell','Tornado','Web','RESTful','云计算','分布式','前端','后端','大数据','高并发','数据分析','数据挖掘','机器学习','爬虫','算法','自动化','测试','运维','集群']
     jieba.load_userdict(user_list)
     me_list = ['python', 'django', 'linux', '运维', '自动化', '爬虫', '数据分析', 'shell', 'mysql', 'oracle']
@@ -193,6 +199,6 @@ def process_company(field_name):
             own = [item for item in me_list if item in r[1]]
             if len(own) > 0:
                 suit_list.append([r[0], int(len(own) * 100/len(r[1]))])
-    print(sorted(suit_list, key=lambda x: x[1]))
+    # print(sorted(suit_list, key=lambda x: x[1]))
     return sorted(suit_list, key=lambda x: x[1])
-process_company("company_name, job_requirement")
+# process_company("company_name, job_requirement")

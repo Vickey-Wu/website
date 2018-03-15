@@ -57,7 +57,7 @@ def create_bar():
     bar.add(name1, x1, y1)
     bar.add(name2, x2, y2)
     page.add(bar)
-    bar_com = pe.Bar("python jobs' company", "%", width=900, height=300)
+    bar_com = pe.Bar("python jobs' company", "percent", width=900, height=300)
     bar_com.add(name4, x4, y4)
     page.add(bar_com)
     # line
@@ -67,7 +67,7 @@ def create_bar():
     page.add(line)
     # pie
 
-    pie = pe.Pie("python jobs' requirements", "pie", width=900, height=1200)
+    pie = pe.Pie("python jobs' requirements", "percent", width=900, height=600)
     pie.add(name3, x3, y3)
     page.add(pie)
     return page
